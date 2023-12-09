@@ -1,0 +1,170 @@
+##version: '3.8'
+##
+##services:
+##
+##  # MySQL database service
+##  mysql:
+##    image: mysql
+##    environment:
+##      DATABASE_HOST: docker-mysql
+##      DATABASE_PORT: 3306
+##      MYSQL_DATABASE: bootdocker
+##      MYSQL_USER: admin
+##      MYSQL_PASSWORD: root
+##      MYSQL_ROOT_PASSWORD: root
+##
+##
+##  # Spring Boot app service
+##  app:
+##    image: bootmysql
+##    ports:
+##      - 8080:8080
+##    environment:
+##      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bootdocker?useSSL=false
+##      SPRING_DATASOURCE.USERNAME: admin
+##      SPRING_DATASOURCE.PASSWORD: root
+##    depends_on:
+##      - mysql
+##
+##
+#
+
+#version: '3.8'
+#
+#services:
+#
+#  dbservice:
+#    image: mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: bootdocker
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: root
+#    ports:
+#      - 3307:3306 # Expose MySQL port
+#    networks:
+#      - bootapp
+#
+#  spring-app:
+##    image: dockerspring
+#    build: ./
+#    ports:
+#      - "8081:8080" # Expose Spring Boot app port
+#    depends_on:
+#      - dbservice
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://dbservice:3307/bootdocker?createDatabaseIfNotExist=true
+#      SPRING_DATASOURCE_USERNAME: admin
+#      SPRING_DATASOURCE_PASSWORD: root
+#    networks:
+#      - bootapp
+#
+#networks:
+#  bootapp:
+
+#version: '3'
+#
+#services:
+#  dbservice:
+#    image: mysql
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=root
+##      - MYSQL_DATABASE=bootdocker
+##      - MYSQL_USER=admin
+##      - MYSQL_PASSWORD=root
+#    networks:
+#      - bootapp
+#
+#  dockerspring:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - dbservice
+#    environment:
+#      - spring.datasource.url= jdbc:mysql://dbservice:3306/bootdocker?createDatabaseIfNotExist=true
+#      - spring.datasource.username=root
+#      - spring.datasource.password=root
+##      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#    networks:
+#      - bootapp
+#
+#networks:
+#  bootapp:
+
+
+#version: '3'
+#
+#services:
+#  demo-mysql:
+#    image: mysql:latest
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: bootdocker
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: root
+#    networks:
+#      - bootapp
+#
+#  spring-boot-docker-webapp:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - demo-mysql
+#    ports:
+#      - 8080:8080
+#    environment:
+##      DATABASE_HOST: demo-mysql
+#      DATABASE_USER: admin
+#      DATABASE_PASSWORD: root
+#      DATABASE_NAME: bootdocker
+#      DATABASE_PORT: 3306
+#    networks:
+#      - bootapp
+#
+#
+#networks:
+#  bootapp:
+
+
+
+
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bootdocker
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306" # Expose MySQL port
+    networks:
+      bootapp:
+
+  spring-app:
+    build: .
+    ports:
+      - "8080:8080" # Expose Spring Boot app port
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bootdocker
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: root
+    networks:
+      bootapp:
+
+networks:
+  bootapp:
+
+
+
+
